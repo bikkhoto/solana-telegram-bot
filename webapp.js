@@ -19,8 +19,13 @@ const connection = new Connection(process.env.SOLANA_RPC_URL || 'https://api.mai
 // Jupiter API endpoint
 const JUPITER_API_URL = 'https://quote-api.jup.ag/v6';
 
-// Default MYXN token mint (placeholder - update with actual mint address)
-const MYXN_MINT = process.env.MYXN_MINT || 'YOUR_MYXN_TOKEN_MINT_ADDRESS';
+// MYXN token mint - MUST be configured in environment
+if (!process.env.MYXN_MINT) {
+  console.error('ERROR: MYXN_MINT environment variable is required');
+  console.error('Please set MYXN_MINT in your .env file to your token\'s mint address');
+  process.exit(1);
+}
+const MYXN_MINT = process.env.MYXN_MINT;
 
 // API Routes
 
@@ -132,7 +137,8 @@ app.post('/api/send-transaction', async (req, res) => {
     const rawTransaction = Buffer.from(signedTransaction, 'base64');
     const txid = await connection.sendRawTransaction(rawTransaction, {
       skipPreflight: false,
-      maxRetries: 3
+      maxRetries: 5,
+      preflightCommitment: 'confirmed'
     });
 
     res.json({

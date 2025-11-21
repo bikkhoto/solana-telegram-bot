@@ -178,7 +178,9 @@ async function getQuote() {
         document.getElementById('swapButton').innerHTML = '<span class="loading"></span> Getting Quote...';
         
         // Convert amount to smallest unit (lamports for SOL = 9 decimals)
-        const decimals = 9; // Assuming 9 decimals, adjust as needed
+        // NOTE: Most Solana tokens use 9 decimals. For tokens with different decimals,
+        // fetch token metadata or make this configurable
+        const decimals = 9; // Default: 9 decimals (SOL standard)
         const amountInSmallestUnit = Math.floor(fromAmount * Math.pow(10, decimals));
         
         const response = await fetch('/api/quote', {
@@ -200,7 +202,9 @@ async function getQuote() {
         currentQuote = quote;
         
         // Calculate output amount
-        const outputDecimals = 9; // Assuming 9 decimals
+        // NOTE: Using 9 decimals as default. For custom tokens with different decimals,
+        // this should be fetched from token metadata
+        const outputDecimals = 9; // Default: 9 decimals
         const outputAmount = quote.outAmount / Math.pow(10, outputDecimals);
         
         // Update UI
