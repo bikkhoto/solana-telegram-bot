@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>$MYXN DEX - Solana Token Swap</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .container {
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 30px;
+            max-width: 500px;
+            width: 100%;
+        }
+
+        .wallet-section {
+            margin-bottom: 25px;
+        }
+
+        .wallet-button {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .wallet-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .wallet-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .wallet-info {
+            background: #f7f9fc;
+            border-radius: 12px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+
+        .wallet-info p {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .wallet-address {
+            font-family: monospace;
+            font-size: 12px;
+            color: #333;
+            word-break: break-all;
+        }
+
+        .swap-section {
+            margin-top: 25px;
+        }
+
+        .token-input {
+            background: #f7f9fc;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+
+        .token-label {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .balance {
+            font-size: 13px;
+            color: #999;
+        }
+
+        .input-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        input[type="number"] {
+            flex: 1;
+            border: none;
+            background: transparent;
+            font-size: 24px;
+            font-weight: 600;
+            outline: none;
+            color: #333;
+        }
+
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        .token-select {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: white;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .token-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .swap-arrow {
+            text-align: center;
+            margin: -10px 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .swap-arrow-btn {
+            background: white;
+            border: 3px solid #f7f9fc;
+            border-radius: 12px;
+            width: 40px;
+            height: 40px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .swap-arrow-btn:hover {
+            transform: rotate(180deg);
+        }
+
+        .quote-section {
+            background: #fff8e1;
+            border-radius: 12px;
+            padding: 15px;
+            margin: 20px 0;
+            display: none;
+        }
+
+        .quote-section.show {
+            display: block;
+        }
+
+        .quote-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .quote-label {
+            color: #666;
+        }
+
+        .quote-value {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .swap-button {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-top: 10px;
+        }
+
+        .swap-button:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .swap-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .status-message {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 12px;
+            font-size: 14px;
+            display: none;
+        }
+
+        .status-message.show {
+            display: block;
+        }
+
+        .status-message.success {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-message.error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .status-message.info {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .explorer-link {
+            display: inline-block;
+            margin-top: 10px;
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .explorer-link:hover {
+            text-decoration: underline;
+        }
+
+        .footer {
+            color: white;
+            text-align: center;
+            margin-top: 30px;
+            opacity: 0.8;
+            font-size: 14px;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .slippage-settings {
+            margin-bottom: 20px;
+        }
+
+        .slippage-label {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 8px;
+        }
+
+        .slippage-options {
+            display: flex;
+            gap: 8px;
+        }
+
+        .slippage-btn {
+            flex: 1;
+            padding: 8px;
+            border: 2px solid #e0e0e0;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .slippage-btn.active {
+            border-color: #667eea;
+            background: #f0f4ff;
+            color: #667eea;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>💎 $MYXN DEX</h1>
+        <p>Powered by Jupiter Aggregator on Solana</p>
+    </div>
+
+    <div class="container">
+        <!-- Wallet Connection -->
+        <div class="wallet-section">
+            <button id="connectWallet" class="wallet-button">
+                Connect Wallet
+            </button>
+            <div id="walletInfo" class="wallet-info" style="display: none;">
+                <p>Connected Wallet:</p>
+                <p class="wallet-address" id="walletAddress"></p>
+                <p style="margin-top: 10px;">Balance: <span id="walletBalance">-</span> SOL</p>
+            </div>
+        </div>
+
+        <!-- Slippage Settings -->
+        <div class="slippage-settings">
+            <div class="slippage-label">Slippage Tolerance</div>
+            <div class="slippage-options">
+                <button class="slippage-btn" data-slippage="10">0.1%</button>
+                <button class="slippage-btn active" data-slippage="50">0.5%</button>
+                <button class="slippage-btn" data-slippage="100">1%</button>
+                <button class="slippage-btn" data-slippage="300">3%</button>
+            </div>
+        </div>
+
+        <!-- Swap Interface -->
+        <div class="swap-section">
+            <div class="token-input">
+                <div class="token-label">
+                    <span>You Pay</span>
+                    <span class="balance">Balance: <span id="fromBalance">-</span></span>
+                </div>
+                <div class="input-wrapper">
+                    <input type="number" id="fromAmount" placeholder="0.0" step="0.01" min="0">
+                    <div class="token-select" id="fromToken">
+                        <div class="token-icon">S</div>
+                        <span>SOL</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="swap-arrow">
+                <div class="swap-arrow-btn" id="swapDirection">
+                    ⇅
+                </div>
+            </div>
+
+            <div class="token-input">
+                <div class="token-label">
+                    <span>You Receive</span>
+                    <span class="balance">Balance: <span id="toBalance">-</span></span>
+                </div>
+                <div class="input-wrapper">
+                    <input type="number" id="toAmount" placeholder="0.0" readonly>
+                    <div class="token-select" id="toToken">
+                        <div class="token-icon">M</div>
+                        <span>MYXN</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quote Display -->
+            <div id="quoteSection" class="quote-section">
+                <div class="quote-info">
+                    <span class="quote-label">Rate:</span>
+                    <span class="quote-value" id="quoteRate">-</span>
+                </div>
+                <div class="quote-info">
+                    <span class="quote-label">Price Impact:</span>
+                    <span class="quote-value" id="priceImpact">-</span>
+                </div>
+                <div class="quote-info">
+                    <span class="quote-label">Minimum Received:</span>
+                    <span class="quote-value" id="minReceived">-</span>
+                </div>
+            </div>
+
+            <button id="swapButton" class="swap-button" disabled>
+                Connect Wallet to Swap
+            </button>
+
+            <div id="statusMessage" class="status-message"></div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>⚠️ Always verify transaction details before confirming</p>
+        <p style="margin-top: 5px;">Powered by Solana & Jupiter</p>
+    </div>
+
+    <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

@@ -1,6 +1,50 @@
-# Solana Telegram DEX Trading Bot
+# Solana DEX Trading Platform
 
-A Telegram bot for trading on Solana DEX using Jupiter Aggregator. This bot allows you to check your wallet balance and swap tokens directly through Telegram commands.
+A comprehensive Solana DEX trading solution with **two deployment options**:
+
+1. **Telegram Bot** - Trade via Telegram commands
+2. **Web Application** - Modern web interface for browser-based trading (like Axiom.trade)
+
+Both powered by Jupiter Aggregator for optimal swap routes on Solana.
+
+---
+
+## 🚀 Quick Start
+
+**Choose your preferred interface:**
+
+### Option 1: Telegram Bot
+```bash
+npm start
+```
+[Full Telegram Bot Documentation](#telegram-bot)
+
+### Option 2: Web Application
+```bash
+npm run webapp
+```
+[Full Web App Documentation](WEBAPP-README.md) | [cPanel Deployment Guide](CPANEL-DEPLOYMENT.md)
+
+---
+
+## 🌐 Web Application (NEW!)
+
+A modern, browser-based DEX interface for trading $MYXN tokens. **No Telegram required!**
+
+### Key Features:
+- 🎨 Modern UI similar to popular DEX platforms
+- 💰 Connect your own wallet (Phantom, Solflare)
+- 🔒 Non-custodial - you control your funds
+- ⚡ Real-time quotes and fast swaps
+- 📱 Mobile responsive
+- 🖥️ **cPanel compatible** - easy deployment
+
+**[→ View Web App Documentation](WEBAPP-README.md)**
+**[→ cPanel Deployment Guide](CPANEL-DEPLOYMENT.md)**
+
+---
+
+# Telegram Bot
 
 ## ⚠️ Security Warning
 
