@@ -185,10 +185,11 @@ test('README contains security warnings', () => {
   const readmePath = path.join(__dirname, 'README.md');
   const readmeContent = fs.readFileSync(readmePath, 'utf8');
   
-  assert(readmeContent.includes('Security Warning') || readmeContent.includes('⚠️'), 
-    'Should have security warnings');
-  assert(readmeContent.toLowerCase().includes('test wallet'), 
-    'Should warn about using test wallets');
+  const hasSecurityWarning = readmeContent.includes('Security Warning') || readmeContent.includes('⚠️');
+  assert(hasSecurityWarning, 'Should have security warnings');
+  
+  const hasTestWalletWarning = readmeContent.toLowerCase().includes('test wallet');
+  assert(hasTestWalletWarning, 'Should warn about using test wallets');
 });
 
 // Test 15: Verify Jupiter API integration
