@@ -117,6 +117,8 @@ The project has 6 vulnerability warnings from `npm audit`. These are in transiti
 
 **Risk Assessment:** Low - The vulnerable code paths are not executed in this application.
 
+**Recommendation:** Periodically check for updates to `node-telegram-bot-api` and review the dependency chain. Monitor the [node-telegram-bot-api releases](https://github.com/yagop/node-telegram-bot-api/releases) for versions that may resolve these transitive dependency issues.
+
 ## Adding New Tests
 
 To add new tests, edit `test.js` and use the `test()` helper function:

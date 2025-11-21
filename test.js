@@ -12,6 +12,11 @@ let passed = 0;
 let failed = 0;
 const failures = [];
 
+/**
+ * Simple test runner for synchronous tests
+ * Note: This test function only supports synchronous test functions
+ * For async tests, consider using a proper test framework like Jest or Mocha
+ */
 function test(name, fn) {
   try {
     fn();
@@ -64,9 +69,13 @@ test('All required dependencies are installed', () => {
     'node-telegram-bot-api'
   ];
   
+  // Verify each dependency is installed and can be resolved
   requiredDeps.forEach(dep => {
-    const depPath = path.join(nodeModulesPath, dep);
-    assert(fs.existsSync(depPath), `${dep} should be installed`);
+    try {
+      require.resolve(dep);
+    } catch (error) {
+      assert.fail(`${dep} should be installed and resolvable`);
+    }
   });
 });
 
